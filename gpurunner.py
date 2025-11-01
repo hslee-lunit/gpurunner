@@ -40,28 +40,7 @@ def _dummy_gpu_task(
         jitter_max_duration: Maximum duration (seconds) of a jitter event
         jitter_sleep_multiplier: Multiplier for sleep_time during jitter (higher = lower GPU util)
     """
-    # Force CUDA initialization in child process to handle systems where nvidia-uvm is not pre-loaded
-    # Retry mechanism for CUDA Error 802 (system not yet initialized)
-    max_retries = 5
-    for attempt in range(max_retries):
-        try:
-            # Try to initialize CUDA explicitly
-            torch.cuda.init()
-        except Exception:
-            pass  # init() may not be available in all PyTorch versions
-        
-        try:
-            torch.cuda.set_device(gpu_id)
-            # If successful, break out of retry loop
-            break
-        except RuntimeError as e:
-            if "802" in str(e) and attempt < max_retries - 1:
-                # CUDA system not initialized - wait and retry
-                print(f"GPU {gpu_id}: CUDA init failed (attempt {attempt+1}/{max_retries}), retrying...")
-                sleep(2 ** attempt)  # Exponential backoff: 1s, 2s, 4s, 8s
-            else:
-                # Either not error 802, or max retries reached
-                raise
+    torch.cuda.set_device(gpu_id)
 
     data = torch.randn(matrix_size, matrix_size).cuda()
     
