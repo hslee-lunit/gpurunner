@@ -8,8 +8,8 @@ from typing import List
 
 import torch
 
-_SLEEP_TIME = 0.0005
-_MATRIX_SIZE = 3000
+_SLEEP_TIME = 0
+_MATRIX_SIZE = 30000
 
 
 def _dummy_gpu_task(
@@ -17,7 +17,7 @@ def _dummy_gpu_task(
     stop_event: multiprocessing.Event,
     sleep_time: float = _SLEEP_TIME,
     matrix_size: int = _MATRIX_SIZE,
-    enable_jitter: bool = True,
+    enable_jitter: bool = False,
     jitter_min_interval: float = 1.0,
     jitter_max_interval: float = 20.0,
     jitter_min_duration: float = 1.0,
