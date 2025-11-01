@@ -5,6 +5,7 @@ description = "GPU utility script to keep GPUs busy"
 requires-python = ">=3.8"
 dependencies = [
     "torch>=2.1.0",
+    "numpy",
 ]
 
 [project.scripts]
